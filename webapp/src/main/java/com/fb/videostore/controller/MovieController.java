@@ -1,8 +1,13 @@
 package com.fb.videostore.controller;
 
+import com.fb.movie.projections.MovieAvailability;
 import com.fb.videostore.service.MovieService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.lang.String.format;
 
@@ -29,5 +34,17 @@ public class MovieController {
 
         movieService.rent(serialNumber, customer);
         return ResponseEntity.ok(format("Movie with sn %s rented to %s", serialNumber, customer));
+    }
+
+    @GetMapping("/movies")
+    public ResponseEntity<String> moviesAvailability() {
+        List<MovieAvailability> allMovieAvailability = movieService.getAllMovieAvailability();
+        String result = allMovieAvailability.stream().map(m -> m.toString()).collect(Collectors.joining("\n"));
+        return ResponseEntity.ok(result);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<String> handle(RuntimeException e) {
+        return new ResponseEntity<String>("Movie already rented", HttpStatus.NOT_FOUND);
     }
 }

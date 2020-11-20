@@ -9,4 +9,7 @@ data class RentMovieCommand(@TargetAggregateIdentifier val serialNumber: String,
 
 data class MovieRegisteredEvent(val serialNumber: String, val title: String)
 
-data class MovieRentedEvent(val serialNumber: String, val customer: String)
+data class MovieRentedEvent(val serialNumber: String, val title: String,  val customer: String)
+
+
+class AllMovieAvailabilityQuery()

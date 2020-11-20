@@ -1,4 +1,4 @@
-package com.fb.movie;
+package com.fb.movie.command;
 
 import com.fb.api.MovieRegisteredEvent;
 import com.fb.api.MovieRentedEvent;
@@ -20,6 +20,7 @@ public class Movie {
 
     @AggregateIdentifier
     private String serialNumber;
+    private String title;
 
     private boolean isAvailable;
 
@@ -37,7 +38,7 @@ public class Movie {
         if (!isAvailable) {
             throw new RuntimeException("Movie already rented!");
         }
-        apply(new MovieRentedEvent(command.getSerialNumber(), command.getCustomer()));
+        apply(new MovieRentedEvent(command.getSerialNumber(), title, command.getCustomer()));
         logger.info("Generated MovieRentedEvent");
     }
 
@@ -46,6 +47,7 @@ public class Movie {
         logger.info("handling MovieRegisteredEvent");
         this.serialNumber = event.getSerialNumber();
         this.isAvailable = true;
+        this.title = event.getTitle();
     }
 
     @EventSourcingHandler

@@ -1,5 +1,5 @@
 
-PUT http://localhost:8080/movies/1?title=Avengers
+PUT http://localhost:8080/movies/2?title=Leon
 Accept: application/json
 
 ###
@@ -7,3 +7,7 @@ Accept: application/json
 POST http://localhost:8080/movies/1/rent?customer=Francesco
 Accept: application/json
 
+###
+
+GET http://localhost:8080/movies
+Accept: application/json
