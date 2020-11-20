@@ -1,0 +1,9 @@
+
+PUT http://localhost:8080/movies/1234?title=Avengers
+Accept: application/json
+
+###
+
+POST http://localhost:8080/movies/1234/rent?customer=Francesco
+Accept: application/json
+
