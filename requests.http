@@ -21,3 +21,14 @@ Accept: application/json
 
 GET http://localhost:8080/movies/3/history
 Accept: application/json
+
+###
+
+PUT http://localhost:8080/customers/fabio
+Accept: application/json
+
+###
+
+GET http://localhost:8080/customers
+Accept: application/json
+

@@ -12,6 +12,7 @@
         <module>webapp</module>
         <module>core-api</module>
         <module>movie-service</module>
+        <module>customer-service</module>
     </modules>
 
 

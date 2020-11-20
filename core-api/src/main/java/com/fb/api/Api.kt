@@ -8,7 +8,7 @@ data class RentMovieCommand(@TargetAggregateIdentifier val serialNumber: String,
 
 data class ReturnMovieCommand(@TargetAggregateIdentifier val serialNumber: String, val customer: String)
 
-
+data class CreateCustomerCommand(@TargetAggregateIdentifier val customerName: String)
 
 data class MovieRegisteredEvent(val serialNumber: String, val title: String)
 
@@ -19,3 +19,7 @@ data class ReturnedMovieEvent(val serialNumber: String, val title: String,  val 
 class AllMovieAvailabilityQuery()
 
 data class MovieHistoryQuery(val serialNumber: String)
+
+class GetCustomerQuery()
+
+data class CustomerCreatedEvent(val customerName: String)
