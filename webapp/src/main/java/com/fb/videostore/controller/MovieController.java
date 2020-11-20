@@ -1,6 +1,7 @@
 package com.fb.videostore.controller;
 
-import com.fb.movie.projections.MovieAvailability;
+import com.fb.movie.projections.availability.MovieAvailability;
+import com.fb.movie.projections.history.MovieHistory;
 import com.fb.videostore.service.MovieService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,10 +37,26 @@ public class MovieController {
         return ResponseEntity.ok(format("Movie with sn %s rented to %s", serialNumber, customer));
     }
 
+    @PostMapping("/movies/{serialNumber}/return")
+    public ResponseEntity<String> returnMovie(@PathVariable("serialNumber") String serialNumber,
+                                       @RequestParam("customer") String customer) {
+
+        movieService.returnMovie(serialNumber, customer);
+        return ResponseEntity.ok(format("Movie with sn %s returned by %s", serialNumber, customer));
+    }
+
     @GetMapping("/movies")
     public ResponseEntity<String> moviesAvailability() {
         List<MovieAvailability> allMovieAvailability = movieService.getAllMovieAvailability();
         String result = allMovieAvailability.stream().map(m -> m.toString()).collect(Collectors.joining("\n"));
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/movies/{serialNumber}/history")
+    public ResponseEntity<String> movieHistory(@PathVariable("serialNumber") String serialNumber) {
+
+        List<MovieHistory> movieHistory = movieService.getMovieHistory(serialNumber);
+        String result = movieHistory.stream().map(h -> h.getDescription()).collect(Collectors.joining("\n"));
         return ResponseEntity.ok(result);
     }
 

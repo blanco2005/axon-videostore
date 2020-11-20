@@ -1,4 +1,4 @@
-package com.fb.movie.projections;
+package com.fb.movie.projections.availability;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;

@@ -1,16 +1,15 @@
-package com.fb.movie.projections;
+package com.fb.movie.projections.availability;
 
 import com.fb.api.AllMovieAvailabilityQuery;
 import com.fb.api.MovieRegisteredEvent;
 import com.fb.api.MovieRentedEvent;
-import com.fb.api.RegisterMovieCommand;
+import com.fb.api.ReturnedMovieEvent;
 import org.axonframework.eventhandling.EventHandler;
 import org.axonframework.queryhandling.QueryHandler;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Component
 public class StoreProjection {
@@ -44,6 +43,15 @@ public class StoreProjection {
         Optional<MovieAvailability> result = movieAvailabilityRepository.findById(event.getTitle());
         result.ifPresent( m -> {
             m.setNumberOfCopiesAvailable(m.getNumberOfCopiesAvailable() -1);
+            movieAvailabilityRepository.save(m);
+        });
+    }
+
+    @EventHandler
+    public void on(ReturnedMovieEvent event) {
+        Optional<MovieAvailability> result = movieAvailabilityRepository.findById(event.getTitle());
+        result.ifPresent( m -> {
+            m.setNumberOfCopiesAvailable(m.getNumberOfCopiesAvailable() +1);
             movieAvailabilityRepository.save(m);
         });
     }

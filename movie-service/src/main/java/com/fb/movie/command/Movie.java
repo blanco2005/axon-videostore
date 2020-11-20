@@ -1,9 +1,6 @@
 package com.fb.movie.command;
 
-import com.fb.api.MovieRegisteredEvent;
-import com.fb.api.MovieRentedEvent;
-import com.fb.api.RegisterMovieCommand;
-import com.fb.api.RentMovieCommand;
+import com.fb.api.*;
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.modelling.command.AggregateIdentifier;
@@ -42,6 +39,12 @@ public class Movie {
         logger.info("Generated MovieRentedEvent");
     }
 
+    @CommandHandler
+    public void on(ReturnMovieCommand command) {
+        apply(new ReturnedMovieEvent(command.getSerialNumber(), title, command.getCustomer()));
+        logger.info("Generated ReturnedMovieEvent");
+    }
+
     @EventSourcingHandler
     private void handle(MovieRegisteredEvent event) {
         logger.info("handling MovieRegisteredEvent");
@@ -54,5 +57,11 @@ public class Movie {
     private void handle(MovieRentedEvent event) {
         logger.info("handling MovieRentedEvent");
         this.isAvailable = false;
+    }
+
+    @EventSourcingHandler
+    private void handle(ReturnedMovieEvent event) {
+        logger.info("handling ReturnedMovieEvent");
+        this.isAvailable = true;
     }
 }

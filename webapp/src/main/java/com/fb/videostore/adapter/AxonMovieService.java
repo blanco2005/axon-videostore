@@ -1,9 +1,8 @@
 package com.fb.videostore.adapter;
 
-import com.fb.api.AllMovieAvailabilityQuery;
-import com.fb.api.RegisterMovieCommand;
-import com.fb.api.RentMovieCommand;
-import com.fb.movie.projections.MovieAvailability;
+import com.fb.api.*;
+import com.fb.movie.projections.availability.MovieAvailability;
+import com.fb.movie.projections.history.MovieHistory;
 import com.fb.videostore.service.MovieService;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.messaging.responsetypes.ResponseTypes;
@@ -14,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 
 public class AxonMovieService implements MovieService {
 
@@ -41,11 +39,30 @@ public class AxonMovieService implements MovieService {
     logger.info("Rent movie command sent");
   }
 
+  @Override
+  public void returnMovie(String serialNumber, String customer) {
+    logger.info("Sending return movie command...");
+    commandGateway.send(new ReturnMovieCommand(serialNumber, customer));
+    logger.info("Return movie command sent");
+  }
+
   public List<MovieAvailability> getAllMovieAvailability() {
     CompletableFuture<List<MovieAvailability>> query =
         queryGateway.query(
             new AllMovieAvailabilityQuery(),
             ResponseTypes.multipleInstancesOf(MovieAvailability.class));
+    try {
+      return query.get();
+    } catch (Exception e) {
+      throw new RuntimeException("Future problem");
+    }
+  }
+
+  public List<MovieHistory> getMovieHistory(String serialNumber) {
+    CompletableFuture<List<MovieHistory>> query =
+            queryGateway.query(
+                    new MovieHistoryQuery(serialNumber),
+                    ResponseTypes.multipleInstancesOf(MovieHistory.class));
     try {
       return query.get();
     } catch (Exception e) {
