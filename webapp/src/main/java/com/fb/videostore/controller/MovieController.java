@@ -29,14 +29,6 @@ public class MovieController {
         return ResponseEntity.ok(format("Movie with sn %s and title %s registered", serialNumber, title));
     }
 
-    @PostMapping("/movies/{serialNumber}/rent")
-    public ResponseEntity<String> rent(@PathVariable("serialNumber") String serialNumber,
-                                   @RequestParam("customer") String customer) {
-
-        movieService.rent(serialNumber, customer);
-        return ResponseEntity.ok(format("Movie with sn %s rented to %s", serialNumber, customer));
-    }
-
     @PostMapping("/movies/{serialNumber}/return")
     public ResponseEntity<String> returnMovie(@PathVariable("serialNumber") String serialNumber,
                                        @RequestParam("customer") String customer) {
